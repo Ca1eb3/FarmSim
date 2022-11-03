@@ -1,2 +1,0 @@
-# FarmSim
-Farming Sim game
