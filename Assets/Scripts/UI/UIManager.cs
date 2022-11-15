@@ -61,6 +61,7 @@ public class UIManager : MonoBehaviour
 
     public void ToggleInventoryPanel()
     {
+        Debug.Log("sdfsdf");
         inventoryPanel.SetActive(!inventoryPanel.activeSelf);
         RenderInventory();
     }
