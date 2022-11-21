@@ -3795,6 +3795,7 @@ GameObject:
   - component: {fileID: 1758839202}
   - component: {fileID: 1758839201}
   - component: {fileID: 1758839200}
+  - component: {fileID: 1758839203}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -3886,6 +3887,25 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1758839203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1758839199}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98b399499a7083944bbe25c3c6fcf84c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timestamp:
+    year: 0
+    season: 0
+    day: 0
+    hour: 0
+    minute: 0
+  timeScale: 1
 --- !u!224 &1774209016 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6166458492433645572, guid: 37780e8ec93e23840b5ca4341a232310, type: 3}
