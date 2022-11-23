@@ -38,6 +38,15 @@ public class GameTimeStamp
         this.minute = minute;
     }
 
+    public GameTimeStamp(GameTimeStamp timestamp)
+    {
+        this.year = timestamp.year;
+        this.season = timestamp.season;
+        this.day = timestamp.day;
+        this.hour = timestamp.hour;
+        this.minute = timestamp.minute;
+    }
+
     // Methods
     public void UpdateClock()
     {
@@ -79,7 +88,7 @@ public class GameTimeStamp
     {
         return hour * 60;
     }
-    public static int DaysToHOurs(int days)
+    public static int DaysToHours(int days)
     {
         return days * 24;
     }
@@ -91,5 +100,12 @@ public class GameTimeStamp
     public static int YearsToDays(int years)
     {
         return years * 4;
+    }
+    public static int CompareTimeStamps(GameTimeStamp timeStamp1, GameTimeStamp timeStamp2)
+    {
+        int timestamp1Hours = DaysToHours(YearsToDays(timeStamp1.year) + DaysToHours(SeasonsToDays(timeStamp1.season)) + DaysToHours(timeStamp1.day) + timeStamp1.hour);
+        int timestamp2Hours = DaysToHours(YearsToDays(timeStamp2.year) + DaysToHours(SeasonsToDays(timeStamp2.season)) + DaysToHours(timeStamp2.day) + timeStamp2.hour);
+        int difference = timestamp1Hours - timestamp2Hours;
+        return Mathf.Abs(difference);
     }
 }

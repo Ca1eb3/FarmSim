@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIManager : MonoBehaviour
+public class UIManager : MonoBehaviour, ITimeTracker
 {
     public static UIManager Instance { get; private set; }
     [Header("Status Bar")]
     //Tool equip slot on the status bar
     public Image toolEquipSlot;
+    public Text timeText;
+    public Text dateText;
 
 
     [Header("Inventory System")]
@@ -49,6 +51,8 @@ public class UIManager : MonoBehaviour
     {
         RenderInventory();
         AssignSlotIndexes();
+
+        TimeManager.Instance.RegisterTracker(this);
     }
 
     //Iterate through the slot UI elements and assign it its reference slot index
@@ -131,4 +135,25 @@ public class UIManager : MonoBehaviour
         itemDescriptionText.text = data.description;
     }
 
+    public void ClockUpdate(GameTimeStamp timeStamp)
+    {
+        int hours = timeStamp.hour;
+        int minutes = timeStamp.minute;
+
+        string prefix = "AM ";
+
+        if(hours > 12)
+        {
+            prefix = "PM ";
+            hours -= 12;
+        }
+
+        timeText.text = prefix + hours + ":" + minutes.ToString("00");
+
+        int day = timeStamp.day;
+        string season = timeStamp.season.ToString();
+        string dayOfTheWeek = timeStamp.GetDayOfTheWeek().ToString();
+
+        dateText.text = season + " " + day + " (" + dayOfTheWeek + ") ";
+    }
 }
