@@ -9,6 +9,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     [Header("Status Bar")]
     //Tool equip slot on the status bar
     public Image toolEquipSlot;
+    //Time UI
     public Text timeText;
     public Text dateText;
 
@@ -33,6 +34,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
     public Text itemNameText;
     public Text itemDescriptionText;
 
+
     private void Awake()
     {
         //If there is more than one instance, destroy the extra
@@ -52,6 +54,7 @@ public class UIManager : MonoBehaviour, ITimeTracker
         RenderInventory();
         AssignSlotIndexes();
 
+        //Add UIManager to the list of objects TimeManager will notify when the time updates
         TimeManager.Instance.RegisterTracker(this);
     }
 
@@ -135,25 +138,36 @@ public class UIManager : MonoBehaviour, ITimeTracker
         itemDescriptionText.text = data.description;
     }
 
-    public void ClockUpdate(GameTimeStamp timeStamp)
+    //Callback to handle the UI for time
+    public void ClockUpdate(GameTimestamp timestamp)
     {
-        int hours = timeStamp.hour;
-        int minutes = timeStamp.minute;
+        //Handle the time
+        //Get the hours and minutes
+        int hours = timestamp.hour;
+        int minutes = timestamp.minute;
 
+        //AM or PM
         string prefix = "AM ";
 
-        if(hours > 12)
+        //Convert hours to 12 hour clock
+        if (hours > 12)
         {
+            //Time becomes PM 
             prefix = "PM ";
-            hours -= 12;
+            hours = hours - 12;
+            Debug.Log(hours);
         }
 
+        //Format it for the time text display
         timeText.text = prefix + hours + ":" + minutes.ToString("00");
 
-        int day = timeStamp.day;
-        string season = timeStamp.season.ToString();
-        string dayOfTheWeek = timeStamp.GetDayOfTheWeek().ToString();
+        //Handle the Date
+        int day = timestamp.day;
+        string season = timestamp.season.ToString();
+        string dayOfTheWeek = timestamp.GetDayOfTheWeek().ToString();
 
-        dateText.text = season + " " + day + " (" + dayOfTheWeek + ") ";
+        //Format it for the date text display
+        dateText.text = season + " " + day + " (" + dayOfTheWeek + ")";
+
     }
 }

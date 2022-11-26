@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: CabbageSeed
   m_EditorClassIdentifier: 
   description: Seeds to grow cabbage
-  thumbnail: {fileID: 0}
+  thumbnail: {fileID: 21300000, guid: 3dbf7eaad544e834987c121a44698209, type: 3}
   gameModel: {fileID: 0}
   daysToGrow: 3
   cropToYield: {fileID: 11400000, guid: 57fef7fe4734a9e4aab4a30aad162d87, type: 2}
+  seedling: {fileID: 1000013410243764, guid: 56b36da289d9a9e4cb37c5f588e23748, type: 3}

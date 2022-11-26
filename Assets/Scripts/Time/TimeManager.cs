@@ -4,18 +4,18 @@ using UnityEngine;
 
 public class TimeManager : MonoBehaviour
 {
-
     public static TimeManager Instance { get; private set; }
 
-    [Header ("Internal Clock")]
+    [Header("Internal Clock")]
     [SerializeField]
-    GameTimeStamp timestamp;
-
+    GameTimestamp timestamp;
     public float timeScale = 1.0f;
 
-    [Header ("Day and Night cycle")]
+    [Header("Day and Night cycle")]
+    //The transform of the directional light (sun)
     public Transform sunTransform;
 
+    //List of Objects to inform of changes to the time
     List<ITimeTracker> listeners = new List<ITimeTracker>();
 
     private void Awake()
@@ -31,12 +31,13 @@ public class TimeManager : MonoBehaviour
             Instance = this;
         }
     }
-
     // Start is called before the first frame update
     void Start()
     {
-        timestamp = new GameTimeStamp(0, 0, 1, 6, 0);
+        //Initialise the time stamp
+        timestamp = new GameTimestamp(0, GameTimestamp.Season.Spring, 1, 6, 0);
         StartCoroutine(TimeUpdate());
+
     }
 
     IEnumerator TimeUpdate()
@@ -44,14 +45,18 @@ public class TimeManager : MonoBehaviour
         while (true)
         {
             Tick();
-            yield return new WaitForSeconds(1/timeScale);
+            yield return new WaitForSeconds(1 / timeScale);
         }
+
     }
 
+
+    //A tick of the in-game time
     public void Tick()
     {
         timestamp.UpdateClock();
 
+        //Inform each of the listeners of the new time state 
         foreach (ITimeTracker listener in listeners)
         {
             listener.ClockUpdate(timestamp);
@@ -60,24 +65,38 @@ public class TimeManager : MonoBehaviour
         UpdateSunMovement();
     }
 
-    public void UpdateSunMovement()
+    //Day and night cycle
+    void UpdateSunMovement()
     {
+        //Convert the current time to minutes
+        int timeInMinutes = GameTimestamp.HoursToMinutes(timestamp.hour) + timestamp.minute;
 
-        int timeInMinutes = GameTimeStamp.HoursToMinutes(timestamp.hour) + timestamp.minute;
-
+        //Sun moves 15 degrees in an hour
+        //.25 degrees in a minute
+        //At midnight (0:00), the angle of the sun should be -90
         float sunAngle = .25f * timeInMinutes - 90;
 
+        //Apply the angle to the directional light
         sunTransform.eulerAngles = new Vector3(sunAngle, 0, 0);
     }
-    public GameTimeStamp GetGameTimeStamp()
+
+    //Get the timestamp
+    public GameTimestamp GetGameTimestamp()
     {
-        return new GameTimeStamp(timestamp);
+        //Return a cloned instance
+        return new GameTimestamp(timestamp);
     }
 
+
+    //Handling Listeners
+
+    //Add the object to the list of listeners
     public void RegisterTracker(ITimeTracker listener)
     {
         listeners.Add(listener);
     }
+
+    //Remove the object from the list of listeners
     public void UnregisterTracker(ITimeTracker listener)
     {
         listeners.Remove(listener);
