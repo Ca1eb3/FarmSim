@@ -110,11 +110,21 @@ public class Land : MonoBehaviour, ITimeTracker
                 case EquipmentData.ToolType.WateringCan:
                     SwitchLandStatus(LandStatus.Watered);
                     break;
+
+                case EquipmentData.ToolType.Shovel:
+
+                    //Remove the crop from the land
+                    if (cropPlanted != null)
+                    {
+                        Destroy(cropPlanted.gameObject);
+                    }
+                    break;
             }
+
             //We don't need to check for seeds if we have already confirmed the tool to be an equipment
             return;
-
         }
+
         //Try casting the itemdata in the toolslot as SeedData
         SeedData seedTool = toolSlot as SeedData;
 
@@ -128,6 +138,7 @@ public class Land : MonoBehaviour, ITimeTracker
             GameObject cropObject = Instantiate(cropPrefab, transform);
             //Move the crop object to the top of the land gameobject
             cropObject.transform.position = new Vector3(transform.position.x, 0, transform.position.z);
+
             //Access the CropBehaviour of the crop we're going to plant
             cropPlanted = cropObject.GetComponent<CropBehaviour>();
             //Plant it with the seed's information
@@ -151,11 +162,20 @@ public class Land : MonoBehaviour, ITimeTracker
                 cropPlanted.Grow();
             }
 
-
             if (hoursElapsed > 24)
             {
                 //Dry up (Switch back to farmland)
                 SwitchLandStatus(LandStatus.Farmland);
+            }
+        }
+
+        //Handle the wilting of the plant when the land is not watered
+        if (landStatus != LandStatus.Watered && cropPlanted != null)
+        {
+            //If the crop has already germinated, start the withering
+            if (cropPlanted.cropState != CropBehaviour.CropState.Seed)
+            {
+                cropPlanted.Wither();
             }
         }
     }
